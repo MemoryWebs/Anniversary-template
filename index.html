@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anniversary Surprise ❤️</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    color: white;
+
+    background-image: url('collage.jpg');
+    background-size: cover;
+    background-position: center;
+
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: rgba(0,0,0,0.65);
+    padding: 20px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 520px;
+}
+
+button {
+    padding: 12px 22px;
+    margin: 10px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+#mainPage, #optionsPage, #photos, #videos, #letter, #timeline {
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="fireworks"></canvas>
+
+<!-- COUNTDOWN PAGE -->
+<div class="container" id="countdownPage">
+<h2>Counting down to our special moment…</h2>
+
+<h1 id="timer">10</h1>
+</div>
+
+
+<!-- MAIN ANNIVERSARY PAGE -->
+<div class="container" id="mainPage">
+
+<h1>Happy Anniversary My Love ❤️</h1>
+
+<p>
+Another beautiful year filled with love, memories, laughter  
+and countless moments together 💖
+</p>
+
+<button onclick="openOptions()">Open Our Memory Box 💝</button>
+
+</div>
+
+
+<!-- OPTIONS MENU -->
+<div class="container" id="optionsPage">
+
+<h2>Our Little World 🌍</h2>
+
+<button onclick="openPhotos()">Photos 📸</button>
+<button onclick="openVideos()">Videos 🎥</button>
+<button onclick="openLetter()">Love Letter 💌</button>
+<button onclick="openTimeline()">Timeline ⏳</button>
+
+<br>
+<button onclick="backToMain()">⬅ Back</button>
+
+</div>
+
+
+<!-- PHOTOS SECTION -->
+<div class="container" id="photos">
+
+<h2>Our Favorite Moments 💖</h2>
+
+<img src="photo1.jpg" width="200">
+<img src="photo2.jpg" width="200">
+
+<br>
+<button onclick="backToOptions()">⬅ Back</button>
+
+</div>
+
+
+<!-- VIDEOS SECTION -->
+<div class="container" id="videos">
+
+<h2>Special Memories 🎥</h2>
+
+<video width="250" controls>
+  <source src="video1.mp4">
+</video>
+
+<br>
+<button onclick="backToOptions()">⬅ Back</button>
+
+</div>
+
+
+<!-- LOVE LETTER SECTION -->
+<div class="container" id="letter">
+
+<h2>A Letter For You 💌</h2>
+
+<p>
+From the day we met, my life changed in the best way possible.  
+Thank you for every smile, every hug and every memory.  
+I’m so lucky to have you by my side.  
+Here’s to forever with you ❤️
+</p>
+
+<button onclick="backToOptions()">⬅ Back</button>
+
+</div>
+
+
+<!-- TIMELINE SECTION -->
+<div class="container" id="timeline">
+
+<h2>Our Journey Together ⏳</h2>
+
+<p>
+First Met – 12 Jan 2023  
+First Date – 20 Feb 2023  
+Best Memory – Goa Trip 2024  
+Today – Still Crazy in Love 💖
+</p>
+
+<button onclick="backToOptions()">⬅ Back</button>
+
+</div>
+
+
+<script>
+
+// COUNTDOWN
+
+let time = 10;
+
+let x = setInterval(function(){
+
+    document.getElementById("timer").innerHTML = time;
+
+    time--;
+
+    if(time < 0){
+        clearInterval(x);
+        showSurprise();
+    }
+
+},1000);
+
+
+function showSurprise(){
+    document.getElementById("countdownPage").style.display = "none";
+    document.getElementById("mainPage").style.display = "block";
+    startFireworks();
+}
+
+
+// NAVIGATION
+
+function openOptions(){
+    document.getElementById("mainPage").style.display = "none";
+    document.getElementById("optionsPage").style.display = "block";
+}
+
+function backToMain(){
+    document.getElementById("optionsPage").style.display = "none";
+    document.getElementById("mainPage").style.display = "block";
+}
+
+function openPhotos(){
+    document.getElementById("optionsPage").style.display = "none";
+    document.getElementById("photos").style.display = "block";
+}
+
+function openVideos(){
+    document.getElementById("optionsPage").style.display = "none";
+    document.getElementById("videos").style.display = "block";
+}
+
+function openLetter(){
+    document.getElementById("optionsPage").style.display = "none";
+    document.getElementById("letter").style.display = "block";
+}
+
+function openTimeline(){
+    document.getElementById("optionsPage").style.display = "none";
+    document.getElementById("timeline").style.display = "block";
+}
+
+function backToOptions(){
+    document.getElementById("photos").style.display = "none";
+    document.getElementById("videos").style.display = "none";
+    document.getElementById("letter").style.display = "none";
+    document.getElementById("timeline").style.display = "none";
+    document.getElementById("optionsPage").style.display = "block";
+}
+
+
+// FIREWORK EFFECT
+
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function startFireworks() {
+    setInterval(createFirework, 700);
+    animate();
+}
+
+function createFirework() {
+    let x = Math.random() * canvas.width;
+    let y = Math.random() * canvas.height / 2;
+
+    for (let i = 0; i < 40; i++) {
+        particles.push({
+            x: x,
+            y: y,
+            radius: Math.random() * 3 + 1,
+            color: "white",
+            speedX: Math.random() * 6 - 3,
+            speedY: Math.random() * 6 - 3,
+            alpha: 1
+        });
+    }
+}
+
+function animate() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach((p, index) => {
+
+        p.x += p.speedX;
+        p.y += p.speedY;
+        p.alpha -= 0.01;
+
+        ctx.globalAlpha = p.alpha;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+
+        if (p.alpha <= 0) {
+            particles.splice(index, 1);
+        }
+    });
+
+    requestAnimationFrame(animate);
+}
+
+</script>
+
+</body>
+</html>
