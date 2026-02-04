@@ -51,6 +51,17 @@ canvas {
 #mainPage, #optionsPage, #photos, #videos, #letter, #timeline {
     display: none;
 }
+
+img {
+    border-radius: 15px;
+    margin: 10px;
+}
+
+.caption {
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #ffd1dc;
+}
 </style>
 </head>
 
@@ -62,7 +73,7 @@ canvas {
 <div class="container" id="countdownPage">
 <h2>Counting down to our special moment…</h2>
 
-<h1 id="timer">10</h1>
+<h1 id="timer"></h1>
 </div>
 
 
@@ -103,7 +114,10 @@ and countless moments together 💖
 <h2>Our Favorite Moments 💖</h2>
 
 <img src="photo1.jpg" width="200">
+<div class="caption">The day I realized you are my forever 💕</div>
+
 <img src="photo2.jpg" width="200">
+<div class="caption">Every moment with you feels magical ✨</div>
 
 <br>
 <button onclick="backToOptions()">⬅ Back</button>
@@ -116,7 +130,7 @@ and countless moments together 💖
 
 <h2>Special Memories 🎥</h2>
 
-<video width="250" controls>
+<video id="annivVideo" width="250" controls>
   <source src="video1.mp4">
 </video>
 
@@ -162,23 +176,39 @@ Today – Still Crazy in Love 💖
 
 <script>
 
-// COUNTDOWN
+// -------- REAL COUNTDOWN (CHANGE DATE HERE) --------
 
-let time = 10;
+function startRealCountdown() {
 
-let x = setInterval(function(){
+let targetDate = new Date("February 4, 2026 07:59:00").getTime();
 
-    document.getElementById("timer").innerHTML = time;
+let timer = setInterval(function(){
 
-    time--;
+let now = new Date().getTime();
 
-    if(time < 0){
-        clearInterval(x);
-        showSurprise();
-    }
+let distance = targetDate - now;
 
-},1000);
+let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+document.getElementById("timer").innerHTML =
+days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+if (distance < 0) {
+clearInterval(timer);
+showSurprise();
+}
+
+}, 1000);
+
+}
+
+startRealCountdown();
+
+
+// -------- SHOW SURPRISE --------
 
 function showSurprise(){
     document.getElementById("countdownPage").style.display = "none";
@@ -187,9 +217,10 @@ function showSurprise(){
 }
 
 
-// NAVIGATION
+// -------- NAVIGATION --------
 
 function openOptions(){
+    stopFireworks();
     document.getElementById("mainPage").style.display = "none";
     document.getElementById("optionsPage").style.display = "block";
 }
@@ -197,6 +228,7 @@ function openOptions(){
 function backToMain(){
     document.getElementById("optionsPage").style.display = "none";
     document.getElementById("mainPage").style.display = "block";
+    startFireworks();
 }
 
 function openPhotos(){
@@ -220,15 +252,24 @@ function openTimeline(){
 }
 
 function backToOptions(){
+
+    let video = document.getElementById("annivVideo");
+
+    if(video){
+        video.pause();
+        video.currentTime = 0;
+    }
+
     document.getElementById("photos").style.display = "none";
     document.getElementById("videos").style.display = "none";
     document.getElementById("letter").style.display = "none";
     document.getElementById("timeline").style.display = "none";
+
     document.getElementById("optionsPage").style.display = "block";
 }
 
 
-// FIREWORK EFFECT
+// -------- FIREWORK EFFECT --------
 
 const canvas = document.getElementById("fireworks");
 const ctx = canvas.getContext("2d");
@@ -239,8 +280,13 @@ canvas.height = window.innerHeight;
 let particles = [];
 
 function startFireworks() {
-    setInterval(createFirework, 700);
+    fireworkInterval = setInterval(createFirework, 700);
     animate();
+}
+
+function stopFireworks(){
+    clearInterval(fireworkInterval);
+    particles = [];
 }
 
 function createFirework() {
@@ -287,4 +333,4 @@ function animate() {
 </script>
 
 </body>
-</html>
+    </html>
